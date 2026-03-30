@@ -1,2 +1,4 @@
 pytest
 requests
+pytest-xdist # CPU's parallelism in each group
+allure-pytest

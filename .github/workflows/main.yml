@@ -12,8 +12,9 @@ jobs:
 
     strategy:
       fail-fast: false
+      # Each marker is a separate runner i.e parallel execution of tests with different markers
       matrix:
-        marker: [ smoke, sanity]
+        marker: [smoke, sanity]
 
 
     steps:
@@ -29,6 +30,53 @@ jobs:
         run: pip install -r requirements.txt
 
 
-      - name: Run tests in parallel with pytest
-        run: pytest -v tests/${{ matrix.marker }}
+      - name: Run tests in parallel with xdist
+        # xdist for CPU's parallelism in each group (-n auto)
+        run: pytest -v tests/${{ matrix.marker }} -n auto --alluredir=allure-results
+
+
+      - name: Upload Allure Results (per group)
+        uses: actions/upload-artifact@v4
+        with:
+            name: allure-${{ matrix.marker }}
+            path: allure-results
+
+
+
+    merge-reports:
+        runs-on: ubuntu-latest
+        needs: parallel-api-tests   # waits for all matrix jobs
+
+        steps:
+          - name: Checkout source
+            uses: actions/checkout@v4
+
+          - name: Download Allure Results from matrix jobs
+            uses: actions/download-artifact@v4
+            with:
+              path: merged-results
+
+          - name: Install Allure
+            run: |
+              sudo apt update
+              sudo apt install -y default-jre
+              wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-commandline-2.29.0.zip
+              unzip allure-commandline-2.29.0.zip -d /opt/allure
+              sudo ln -s /opt/allure/allure-2.29.0/bin/allure /usr/bin/allure
+
+          - name: Merge Allure Results
+            run: |
+              mkdir final-results
+              allure merge merged-results/* -o final-results
+
+          - name: Generate final HTML Allure Report
+            run: |
+              allure generate final-results -o final-report --clean
+
+          - name: Upload Final Allure Report
+            uses: actions/upload-artifact@v4
+            with:
+              name: allure-report
+              path: final-report
+
 

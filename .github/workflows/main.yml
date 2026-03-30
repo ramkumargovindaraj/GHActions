@@ -57,9 +57,11 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y default-jre
-          wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-commandline-2.29.0.zip
-          unzip allure-commandline-2.29.0.zip -d /opt/allure
-          sudo ln -s /opt/allure/allure-2.29.0/bin/allure /usr/bin/allure
+          LATEST_URL=$(curl -s https://api.github.com/repos/allure-framework/allure2/releases/latest | grep browser_download_url | grep -E "allure-.*zip" | cut -d '"' -f 4)
+          echo "Downloading: $LATEST_URL"
+          wget -q $LATEST_URL -O allure.zipwget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-commandline-2.29.0.zip
+          unzip -q allure.zip -d /opt/allureunzip allure-commandline-2.29.0.zip -d /opt/allure
+          sudo ln -sf /opt/allure/allure-*/bin/allure /usr/local/bin/alluresudo ln -s /opt/allure/allure-2.29.0/bin/allure /usr/bin/allure
   
   
       - name: Merge Allure Results

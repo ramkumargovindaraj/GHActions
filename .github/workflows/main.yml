@@ -56,19 +56,28 @@ jobs:
       - name: Install Allure
         run: |
           sudo apt update
-          sudo apt install -y default-jre
-          LATEST_URL=$(curl -s https://api.github.com/repos/allure-framework/allure2/releases/latest | grep browser_download_url | grep -E "allure-.*zip" | cut -d '"' -f 4)
-          echo "Downloading: $LATEST_URL"
+          sudo apt install -y default-jre unzip wget
+          
+          
+          LATEST_URL=$(curl -s https://api.github.com/repos/allure-framework/allure2/releases/latest \
+          | grep browser_download_url \
+          | grep -E "allure-.*zip" \
+          | cut -d '"' -f 4)
+
+          echo "Downloading Allure from $LATEST_URL"
           wget -q $LATEST_URL -O allure.zip
+
           unzip -q allure.zip -d /opt/allure
           sudo ln -sf /opt/allure/allure-*/bin/allure /usr/local/bin/allure
-  
-  
+
+          # Verify installation
+          allure --version
+
       - name: Merge Allure Results
         run: |
             mkdir final-results
             allure merge merged-results/** -o final-results
-  
+
       - name: Generate final HTML Allure Report
         run: |
                 allure generate final-results -o final-report --clean

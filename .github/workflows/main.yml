@@ -9,6 +9,13 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
 
+
+    strategy:
+      fail-fast: false
+      matrix:
+        marker: [ smoke, sanity]
+
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,5 +28,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run pytest
-        run: pytest -v
+
+      - name: Run tests in parallel with pytest
+        run: pytest -v tests/${{ matrix.marker }}
+

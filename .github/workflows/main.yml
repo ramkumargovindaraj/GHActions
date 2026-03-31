@@ -73,20 +73,20 @@ jobs:
           # Verify installation
           allure --version
 
-      - name: Merge Allure Results
-        run: |
-            mkdir -p final-results
-            allure merge merged-results/* -o final-results
-
-      - name: Generate final HTML Allure Report
-        run: |
-            allure generate final-results -o final-report --clean
-  
-      - name: Upload Final Allure Report
-        uses: actions/upload-artifact@v4
-        with:
-            name: allure-report
-            path: final-report
+     # - name: Merge Allure Results
+     #   run: |
+     #       mkdir -p final-results
+     #       allure merge merged-results/* -o final-results
+     #
+     # - name: Generate final HTML Allure Report
+     #   run: |
+     #       allure generate final-results -o final-report --clean
+     #
+     # - name: Upload Final Allure Report
+     #   uses: actions/upload-artifact@v4
+     #   with:
+     #       name: allure-report
+     #       path: final-report
   
 
 

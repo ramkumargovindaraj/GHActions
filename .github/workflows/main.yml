@@ -76,7 +76,7 @@ jobs:
       - name: Merge Allure Results
         run: |
             mkdir -p final-results
-            allure merge merged-results/** -o final-results
+            allure merge merged-results/* -o final-results
 
       - name: Generate final HTML Allure Report
         run: |

@@ -77,7 +77,7 @@ jobs:
         run: |
             mkdir -p final-results
             cp -r tests/sanity/* final-results/
-            cp -r tests/smoke/* final-results/
+       #     cp -r tests/smoke/* final-results/
 
       - name: Generate final HTML Allure Report
         run: |

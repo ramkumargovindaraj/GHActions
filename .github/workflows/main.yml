@@ -55,8 +55,8 @@ jobs:
   
       - name: Install Allure
         run: |
-          sudo apt update
-          sudo apt install -y default-jre unzip wget
+          sudo apt-get update
+          sudo apt-get install -y default-jre unzip wget
           
           
           LATEST_URL=$(curl -s https://api.github.com/repos/allure-framework/allure2/releases/latest \
@@ -80,7 +80,7 @@ jobs:
 
       - name: Generate final HTML Allure Report
         run: |
-                allure generate final-results -o final-report --clean
+            allure generate final-results -o final-report --clean
   
       - name: Upload Final Allure Report
         uses: actions/upload-artifact@v4

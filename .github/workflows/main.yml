@@ -76,8 +76,8 @@ jobs:
       - name: Merge Allure Results
         run: |
             mkdir -p final-results
-            cp -r tests-sanity/* final-results/
-            cp -r tests-sanity/* final-results/
+            cp -r tests/sanity/* final-results/
+            cp -r tests/sanity/* final-results/
 
       - name: Generate final HTML Allure Report
         run: |

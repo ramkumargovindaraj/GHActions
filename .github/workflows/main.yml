@@ -42,7 +42,7 @@ jobs:
 
   merge-reports:
     runs-on: ubuntu-latest
-    needs: parallel-api-tests   # ✅ waits for all matrix jobs
+    needs: parallel-api-tests
   
     steps:
       - name: Checkout source
@@ -77,18 +77,14 @@ jobs:
         run: |
             mkdir -p final-results
             cp -r tests/sanity/* final-results/
-            cp -r tests/sanity/* final-results/
+            cp -r tests/smoke/* final-results/
 
       - name: Generate final HTML Allure Report
         run: |
             allure generate final-results -o final-report --clean
-            ls -R final-report
 
       - name: Upload Final Allure Report
         uses: actions/upload-artifact@v4
         with:
             name: allure-report
             path: final-report
-  
-
-
